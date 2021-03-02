@@ -60,6 +60,7 @@ public:
     float predelayMS = 0.0f;
     float wet = 0.5f;
     float timeValue = 0.5f;
+    float modValue = 1.f;
     
 private:
     FractionalDelay predelay;

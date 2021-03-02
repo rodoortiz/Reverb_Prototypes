@@ -148,14 +148,15 @@ void AlgoReverbAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     predelay.setDelaySamples(predelayInSamples);
     
     fdn.setTime(timeValue);
+    fdn.setDepth(modValue);
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         for (int n = 0; n < buffer.getNumSamples(); ++n) {
             float x = buffer.getWritePointer(channel)[n];
         
-            float verb = predelay.processSample(x, channel);
-            verb = fdn.processSample(verb, channel);
+            float verb = predelay.processSample(x, channel); //Pre Delay
+            verb = fdn.processSample(verb, channel); //Reverb block
             
             float y = ((1.f - wet) * x) + (wet * verb);
             

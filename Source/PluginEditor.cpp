@@ -133,4 +133,8 @@ void AlgoReverbAudioProcessorEditor::sliderValueChanged(Slider* slider) {
     if (slider == &reverbTimeSlider) {
         processor.timeValue = reverbTimeSlider.getValue();
     }
+    
+    if (slider == &modulationSlider) {
+        processor.timeValue = modulationSlider.getValue();
+    }
 }

@@ -37,13 +37,15 @@ private:
     
     float Fs = 48000.f;
     
-    FractionalDelay fractionalDelay1;
-    FractionalDelay fractionalDelay2;
+    FractionalDelay fractionalDelay1 {1571.f, 0.7f};
+    FractionalDelay fractionalDelay2 {2053.f, 0.9f};
+    FractionalDelay fractionalDelay3 {2719.f, 1.1f};
+    FractionalDelay fractionalDelay4 {3463.f, 1.3f};
     
-    float g11 = -1.0f;
-    float g12 = 1.0f;
-    float g21 = 1.0f;
-    float g22 = -1.0f;
+//    float g11 = -1.0f;
+//    float g12 = 1.0f;
+//    float g21 = 1.0f;
+//    float g22 = -1.0f;
     
     float feebackGain = 0.5f;
     
@@ -53,6 +55,6 @@ private:
     float fb3[2] = {0.0f};
     float fb4[2] = {0.0f};
     
-    float speed = 1.0f; // Hz, frequency of LFO
+//    float speed = 1.0f; // Hz, frequency of LFO
     float depth = 10.0f; // percentage of intensity, control amp of LFO
 };
