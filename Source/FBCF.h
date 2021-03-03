@@ -11,8 +11,10 @@
 #pragma once
 
 #include "FractionalDelay.hpp"
+#include "APF.h"
 using namespace std;
 
+//Feedback Comb Filter
 class FBCF {
     
 public:
@@ -21,6 +23,8 @@ public:
     FBCF();
     
     FBCF(float delay, float speed);
+    
+    FBCF(float delay, float speed, float apfDelay, float apfSpeed);
     
     // Destructor
     ~FBCF();
@@ -45,4 +49,19 @@ private:
     float fb1[2] = {0.0f};
     
     float depth = 10.0f; // percentage of intensity, control amp of LFO
+    
+    class SimpleLPF {
+    public:
+        float processSample(float x, int channel) {
+            float y = (0.5f * x) + (0.5f * ff[channel]);
+            ff[channel] = x;
+            return y;
+        }
+        
+    private:
+        float ff[2] = {0.f};
+    };
+    
+    SimpleLPF lpf;
+    APF apf;
 };

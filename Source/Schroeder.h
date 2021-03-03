@@ -39,10 +39,10 @@ private:
     
     float Fs = 48000.f;
     
-    FBCF fbcf1 {1426.f, 0.723f};
-    FBCF fbcf2 {1781.f, 1.257f};
-    FBCF fbcf3 {1973.f, 0.893f};
-    FBCF fbcf4 {2098.f, 1.111f};
+    FBCF fbcf1 {1426.f, 0.723f, 163.f, 0.27f};
+    FBCF fbcf2 {1781.f, 1.257f, 271.f, 0.712f};
+    FBCF fbcf3 {1973.f, 0.893f, 83.f, 0.5821f};
+    FBCF fbcf4 {2098.f, 1.111f, 307.f, 0.9117f};
     
     APF apf1{240.f, 0.8321f}, apf2{82.f, 0.964f};
     

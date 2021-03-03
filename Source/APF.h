@@ -13,6 +13,7 @@
 #include "FractionalDelay.hpp"
 using namespace std;
 
+//All Pass Filter
 class APF {
     
 public:
@@ -30,8 +31,16 @@ public:
     void setFs(float Fs);
     
     void setFeedbackGain(float feedbackGain);
+    
     void setDepth(float depth);
 
+    void setDelay(float delay) {
+        fractionalDelay.setDelaySamples(delay);
+    };
+    
+    void setSpeed(float speed) {
+        fractionalDelay.setSpeed(speed);
+    }
     
 private:
     

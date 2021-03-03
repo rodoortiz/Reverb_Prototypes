@@ -13,6 +13,7 @@
 #include "FractionalDelay.hpp"
 using namespace std;
 
+//Fractional Delay Network
 class FDN {
     
 public:

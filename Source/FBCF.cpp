@@ -18,6 +18,15 @@ FBCF::FBCF(float delay, float speed) {
     fractionalDelay.setSpeed(speed);
 }
 
+FBCF::FBCF(float delay, float speed, float apfDelay, float apfSpeed) {
+    fractionalDelay.setDelaySamples(delay);
+    fractionalDelay.setSpeed(speed);
+    apf.setDelay(apfDelay);
+    apf.setSpeed(apfSpeed);
+    apf.setFeedbackGain(0.2f);
+    apf.setDepth(3.0f);
+}
+
 // Destructor
 FBCF::~FBCF(){
 }
@@ -32,7 +41,8 @@ float FBCF::processSample(float x, int channel){
     
     y = outDL1; //Dividing by 2 because where are doubling signal in this point
 
-    fb1[channel] = outDL1;
+//    fb1[channel] = lpf.processSample(outDL1, channel);
+    fb1[channel] = apf.processSample(outDL1, channel);
     
     return y;
 
@@ -41,6 +51,7 @@ float FBCF::processSample(float x, int channel){
 void FBCF::setFs(float Fs){
     this->Fs = Fs;
     fractionalDelay.setFs(Fs);
+    apf.setFs(Fs);
 }
 
 void FBCF::setFeedbackGain(float feedbackGain) {
