@@ -135,7 +135,7 @@ void AlgoReverbAudioProcessorEditor::sliderValueChanged(Slider* slider) {
     }
     
     if (slider == &modulationSlider) {
-        processor.timeValue = modulationSlider.getValue();
+        processor.modValue = modulationSlider.getValue();
     }
     
     if (slider == &diffusionSlider) {

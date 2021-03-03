@@ -14,6 +14,7 @@
 #include "FractionalDelay.hpp"
 #include "FDN.h"
 #include "APF.h"
+#include "Schroeder.h"
 
 //==============================================================================
 /**
@@ -66,8 +67,9 @@ public:
     
 private:
     FractionalDelay predelay;
-    FDN fdn;
-    APF apf1{240.f, 0.8321f}, apf2{82.f, 0.964f};
+//    FDN fdn;
+//    APF apf1{240.f, 0.8321f}, apf2{82.f, 0.964f};
+    Schroeder schroeder;
     
     float Fs;
     
