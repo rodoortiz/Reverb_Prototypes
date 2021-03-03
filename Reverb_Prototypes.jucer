@@ -18,6 +18,8 @@
             file="Source/FractionalDelay.hpp"/>
       <FILE id="Ue8dk4" name="FDN.cpp" compile="1" resource="0" file="Source/FDN.cpp"/>
       <FILE id="m9lMMr" name="FDN.h" compile="0" resource="0" file="Source/FDN.h"/>
+      <FILE id="E6dlk1" name="APF.cpp" compile="1" resource="0" file="Source/APF.cpp"/>
+      <FILE id="Szom05" name="APF.h" compile="0" resource="0" file="Source/APF.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>

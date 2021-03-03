@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include "FractionalDelay.hpp"
 #include "FDN.h"
+#include "APF.h"
 
 //==============================================================================
 /**
@@ -61,10 +62,12 @@ public:
     float wet = 0.5f;
     float timeValue = 0.5f;
     float modValue = 1.f;
+    float diffusionValue = 0.5f;
     
 private:
     FractionalDelay predelay;
     FDN fdn;
+    APF apf1{240.f, 0.8321f}, apf2{82.f, 0.964f};
     
     float Fs;
     
