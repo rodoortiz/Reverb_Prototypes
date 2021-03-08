@@ -25,6 +25,10 @@
       <FILE id="Nl3hD5" name="Schroeder.cpp" compile="1" resource="0" file="Source/Schroeder.cpp"/>
       <FILE id="Fq0vTf" name="Schroeder.h" compile="0" resource="0" file="Source/Schroeder.h"/>
     </GROUP>
+    <GROUP id="{8E76E416-0FF5-A0E0-BF72-EC75253D1235}" name="Plate Reverb">
+      <FILE id="EPub9t" name="PlateReverb.cpp" compile="1" resource="0" file="Source/PlateReverb.cpp"/>
+      <FILE id="VP1Ez9" name="PlateReverb.h" compile="0" resource="0" file="Source/PlateReverb.h"/>
+    </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
