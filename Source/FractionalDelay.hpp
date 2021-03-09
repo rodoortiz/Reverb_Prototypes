@@ -14,18 +14,15 @@ using namespace std;
 class FractionalDelay {
     
 public:
-    
-    // Constructor function (special function - no return type, name = Class name)
     FractionalDelay();
-    
     FractionalDelay(float delay, float speed);
+    FractionalDelay(float delay, float speed, float depth);
     
-    // Destructor
     ~FractionalDelay();
     
     float processSample(float x,int channel);
 
-    void setFs(float Fs);
+    void setSampleRate(float _sampleRate);
     
     void setDelaySamples(float delay);
     
@@ -35,9 +32,9 @@ public:
     
 private:
     
-    float Fs = 48000.f;
+    float sampleRate = 48000.f; //Sampling Rate
     
-    float delay = 5.f;
+    float delay = 0.0f;
     
     const int MAX_BUFFER_SIZE = 96000;
     float delayBuffer[96000][2] = {0.0f};
@@ -47,7 +44,7 @@ private:
     float depth = 10.0f; // percentage of intensity, control amp of LFO
     
     float currentAngle[2] = {0.0f};
-    float angleChange = speed * (1.f/Fs) * 2.f * M_PI;
+    float angleChange = speed * (1.f/sampleRate) * 2.f * M_PI;
 
 };
 

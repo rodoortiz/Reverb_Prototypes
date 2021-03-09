@@ -46,8 +46,8 @@ float FDN::processSample(float x, int channel){
 
 void FDN::setFs(float Fs){
     this->Fs = Fs;
-    fractionalDelay1.setFs(Fs);
-    fractionalDelay2.setFs(Fs);
+    fractionalDelay1.setSampleRate(Fs);
+    fractionalDelay2.setSampleRate(Fs);
 }
 
 void FDN::setTime(float timeValue){

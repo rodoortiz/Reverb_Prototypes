@@ -50,7 +50,7 @@ float FBCF::processSample(float x, int channel){
 
 void FBCF::setFs(float Fs){
     this->Fs = Fs;
-    fractionalDelay.setFs(Fs);
+    fractionalDelay.setSampleRate(Fs);
     apf.setFs(Fs);
 }
 

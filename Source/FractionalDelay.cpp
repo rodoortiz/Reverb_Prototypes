@@ -11,9 +11,15 @@
 FractionalDelay::FractionalDelay(){
 }
 
-FractionalDelay::FractionalDelay(float delay,float speed){
-    this->delay = delay;
-    this->speed = speed;
+FractionalDelay::FractionalDelay(float _delay, float _speed){
+    this->delay = _delay;
+    this->speed = _speed;
+}
+
+FractionalDelay::FractionalDelay(float _delay, float _speed, float _depth){
+    this->delay = _delay;
+    this->speed = _speed;
+    this->depth = _depth;
 }
 
 // Destructor
@@ -68,8 +74,8 @@ float FractionalDelay::processSample(float x, int channel){
     }
 }
 
-void FractionalDelay::setFs(float Fs){
-    this->Fs = Fs;
+void FractionalDelay::setSampleRate(float _sampleRate){
+    this->sampleRate = _sampleRate;
 }
 
 
@@ -86,7 +92,7 @@ void FractionalDelay::setDelaySamples(float delay){
 void FractionalDelay::setSpeed(float speed){
     if (speed >= 0.1f && speed <= 10.0f){
         this->speed = speed;
-        angleChange = speed * (1.f/Fs) * 2 * M_PI;
+        angleChange = speed * (1.f/sampleRate) * 2 * M_PI;
     }
 }
 

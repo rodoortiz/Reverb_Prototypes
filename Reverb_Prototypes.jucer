@@ -22,6 +22,7 @@
       <FILE id="Szom05" name="APF.h" compile="0" resource="0" file="Source/APF.h"/>
       <FILE id="iTlpYG" name="FBCF.cpp" compile="1" resource="0" file="Source/FBCF.cpp"/>
       <FILE id="nOoEVz" name="FBCF.h" compile="0" resource="0" file="Source/FBCF.h"/>
+      <FILE id="A3mIlt" name="LPF.h" compile="0" resource="0" file="Source/LPF.h"/>
       <FILE id="Nl3hD5" name="Schroeder.cpp" compile="1" resource="0" file="Source/Schroeder.cpp"/>
       <FILE id="Fq0vTf" name="Schroeder.h" compile="0" resource="0" file="Source/Schroeder.h"/>
     </GROUP>

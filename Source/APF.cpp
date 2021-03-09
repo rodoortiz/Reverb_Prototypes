@@ -42,7 +42,7 @@ float APF::processSample(float x, int channel){
 
 void APF::setFs(float Fs){
     this->Fs = Fs;
-    fractionalDelay.setFs(Fs);
+    fractionalDelay.setSampleRate(Fs);
 }
 
 void APF::setFeedbackGain(float feedbackGain) {

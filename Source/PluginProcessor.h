@@ -15,6 +15,7 @@
 #include "FDN.h"
 #include "APF.h"
 #include "Schroeder.h"
+#include "PlateReverb.h"
 
 //==============================================================================
 /**
@@ -66,12 +67,15 @@ public:
     float diffusionValue = 0.5f;
     
 private:
-    FractionalDelay predelay;
-//    FDN fdn;
-//    APF apf1{240.f, 0.8321f}, apf2{82.f, 0.964f};
-    Schroeder schroeder;
+//    FractionalDelay predelay;
+////    FDN fdn;
+////    APF apf1{240.f, 0.8321f}, apf2{82.f, 0.964f};
+//    Schroeder schroeder;
+//
+//    float Fs;
     
-    float Fs;
+    //PLATE REVERB
+    PlateReverb plateReverb;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AlgoReverbAudioProcessor)
