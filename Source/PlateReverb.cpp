@@ -11,7 +11,6 @@
 #include "PlateReverb.h"
 
 PlateReverb::PlateReverb() {
-    
 }
 
 PlateReverb::~PlateReverb() {
@@ -20,18 +19,43 @@ PlateReverb::~PlateReverb() {
 
 //Should be set before preparePlateReverb, converts delay in seconds to delay in samples
 void PlateReverb::prepareDelayValues(double _sampleRate) {
-    preDelayDelay = (float)(delayTimes.preDelay * _sampleRate);
+    //PreDelay
+    preDelayDelay = (float)(delayTimes.preDelayTime * _sampleRate);
+    
+    //AllPassFilters
+    apf1Delay = (float)(delayTimes.apf1DelayTime * _sampleRate);
+    apf2Delay = (float)(delayTimes.apf2DelayTime * _sampleRate);
+    apf3Delay = (float)(delayTimes.apf3DelayTime * _sampleRate);
+    apf4Delay = (float)(delayTimes.apf4DelayTime * _sampleRate);
 }
 
 void PlateReverb::preparePlateReverb(double _sampleRate) {
     sampleRate = _sampleRate;
+    
+    //PreDelay
     preDelay.setSampleRate(_sampleRate);
     preDelay.setDelaySamples(preDelayDelay);
-    preDelay.setDepth(0.0f);
-    preDelay.setSpeed(0.0f);
+    preDelay.setDepth(10.0f);
+    preDelay.setSpeed(1.0f);
+    
+    //Prepare AllPassFilters
+    prepareAllPassFilters(apf_1, sampleRate, apf1Delay, 8.0f, 0.0f, g1);
+    prepareAllPassFilters(apf_2, sampleRate, apf2Delay, 6.0f, 0.0f, g1);
+    prepareAllPassFilters(apf_3, sampleRate, apf3Delay, 9.0f, 0.0f, g2);
+    prepareAllPassFilters(apf_4, sampleRate, apf4Delay, 10.0f, 0.0f, g2);
+    
 }
 
-void PlateReverb::processPlateReverb(AudioBuffer<float>& buffer) {
+void PlateReverb::prepareAllPassFilters(APF& apf, double& sampleRate, float& delay, float depth, float speed, float gain) {
+    apf.setSampleRate(sampleRate);
+    apf.setDelayTime(delay);
+    apf.setDelayDepth(depth);
+    apf.setDelaySpeed(speed);
+    apf.setFeedbackGain(gain);
+}
+
+
+void PlateReverb::processPlateReverb(AudioBuffer<float>& buffer, float& depthValue) {
     auto audioBlock = dsp::AudioBlock<float> (buffer);
     auto context = dsp::ProcessContextReplacing<float>(audioBlock);
     process(context);
@@ -92,8 +116,17 @@ void PlateReverb::processStereo (float* const left, float* const right, const in
     for (int i = 0; i < numSamples; ++i)
     {
         const float input = (left[i] * 0.5f) + (right[i] * 0.5f);
-        const float out = preDelay.processSample(input, 1);
-    
+        
+        //Pre Delay
+        float out = preDelay.processSample(input, 1);
+        out = lpf_1.processSample(out, 1);
+
+        //Diffusion stage
+        out = apf_1.processSample(out, 1);
+        out = apf_2.processSample(out, 1);
+        out = apf_3.processSample(out, 1);
+        out = apf_4.processSample(out, 1);
+        
         left[i] = (out * 0.5) + (left[i] * 0.5) ;
         right[i] = (out * 0.5) + (right[i] * 0.5);
     }

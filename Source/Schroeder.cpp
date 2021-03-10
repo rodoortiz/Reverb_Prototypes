@@ -42,8 +42,8 @@ void Schroeder::setFs(float Fs){
     fbcf2.setFs(Fs);
     fbcf3.setFs(Fs);
     fbcf4.setFs(Fs);
-    apf1.setFs(Fs);
-    apf2.setFs(Fs);
+    apf1.setSampleRate(Fs);
+    apf2.setSampleRate(Fs);
 }
 
 void Schroeder::setFeedbackGain(float feedbackGain) {
@@ -67,6 +67,6 @@ void Schroeder::setDepth(float depth){
     fbcf2.setDepth(depth);
     fbcf3.setDepth(depth);
     fbcf4.setDepth(depth);
-    apf1.setDepth(depth);
-    apf2.setDepth(depth);
+    apf1.setDelayDepth(depth);
+    apf2.setDelayDepth(depth);
 }

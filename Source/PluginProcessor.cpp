@@ -183,7 +183,7 @@ void AlgoReverbAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 //    }
     
     //PLATE REVERB
-    plateReverb.processPlateReverb(buffer);
+    plateReverb.processPlateReverb(buffer, modValue);
         
 }
 

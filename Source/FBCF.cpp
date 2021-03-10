@@ -21,10 +21,10 @@ FBCF::FBCF(float delay, float speed) {
 FBCF::FBCF(float delay, float speed, float apfDelay, float apfSpeed) {
     fractionalDelay.setDelaySamples(delay);
     fractionalDelay.setSpeed(speed);
-    apf.setDelay(apfDelay);
-    apf.setSpeed(apfSpeed);
+    apf.setDelayTime(apfDelay);
+    apf.setDelaySpeed(apfSpeed);
     apf.setFeedbackGain(0.2f);
-    apf.setDepth(3.0f);
+    apf.setDelayDepth(3.0f);
 }
 
 // Destructor
@@ -51,7 +51,7 @@ float FBCF::processSample(float x, int channel){
 void FBCF::setFs(float Fs){
     this->Fs = Fs;
     fractionalDelay.setSampleRate(Fs);
-    apf.setFs(Fs);
+    apf.setSampleRate(Fs);
 }
 
 void FBCF::setFeedbackGain(float feedbackGain) {

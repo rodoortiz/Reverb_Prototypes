@@ -15,10 +15,8 @@ FDN::FDN(){
 //    fractionalDelay2.setDelaySamples(2281.0f);
 }
 
-// Destructor
 FDN::~FDN(){
 }
-
 
 float FDN::processSample(float x, int channel){
     float y;

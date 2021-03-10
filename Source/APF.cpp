@@ -24,7 +24,6 @@ APF::APF(float delay, float speed) {
 APF::~APF(){
 }
 
-
 float APF::processSample(float x, int channel){
     float y;
     
@@ -32,25 +31,31 @@ float APF::processSample(float x, int channel){
     
     float outDL1 = fractionalDelay.processSample(inDL1, channel);
     
-    y = outDL1 + feedbackGain * inDL1; //Dividing by 2 because where are doubling signal in this point
-
+    y = outDL1 + (feedbackGain * inDL1);
+    
     fb1[channel] = outDL1;
     
     return y;
 
 }
 
-void APF::setFs(float Fs){
-    this->Fs = Fs;
-    fractionalDelay.setSampleRate(Fs);
+void APF::setSampleRate(float _sampleRate){
+    this->sampleRate = _sampleRate;
+    fractionalDelay.setSampleRate(_sampleRate);
 }
 
 void APF::setFeedbackGain(float feedbackGain) {
     this->feedbackGain = feedbackGain;
 }
 
-void APF::setDepth(float depth){
-
-    this->depth = depth;
+void APF::setDelayDepth(float depth){
     fractionalDelay.setDepth(depth);
+}
+
+void APF::setDelayTime(float delay) {
+    fractionalDelay.setDelaySamples(delay);
+}
+
+void APF::setDelaySpeed(float speed) {
+    fractionalDelay.setSpeed(speed);
 }
