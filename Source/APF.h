@@ -24,17 +24,17 @@ public:
     
     float processSample(float x, int channel);
 
-    void setSampleRate(float _sampleRate);
+    void setSampleRate(double _sampleRate);
     void setFeedbackGain(float feedbackGain);
     void setDelayDepth(float depth);
     void setDelayTime(float delay);
     void setDelaySpeed(float speed);
     
 private:
-    float sampleRate = 48000.f;
+    double sampleRate = 48000.f;
     
 //    FractionalDelay fractionalDelay {240.f, 0.7f};
-    FractionalDelay fractionalDelay {0.0f, 0.0f};
+    FractionalDelay fractionalDelay {0, 0.0f};
     
     float feedbackGain = 0.5f;
     

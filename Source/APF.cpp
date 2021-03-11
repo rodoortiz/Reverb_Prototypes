@@ -39,7 +39,7 @@ float APF::processSample(float x, int channel){
 
 }
 
-void APF::setSampleRate(float _sampleRate){
+void APF::setSampleRate(double _sampleRate){
     this->sampleRate = _sampleRate;
     fractionalDelay.setSampleRate(_sampleRate);
 }

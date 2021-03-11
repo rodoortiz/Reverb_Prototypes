@@ -41,7 +41,7 @@ private:
     
     float Fs = 48000.f;
     
-    FractionalDelay fractionalDelay {240.f, 0.7f};
+    FractionalDelay fractionalDelay {240, 0.7f};
     
     float feedbackGain = 0.5f;
     

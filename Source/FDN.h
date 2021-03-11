@@ -36,12 +36,12 @@ public:
     
 private:
     
-    float Fs = 48000.f;
+    double Fs = 48000;
     
-    FractionalDelay fractionalDelay1 {1571.f, 0.7f};
-    FractionalDelay fractionalDelay2 {2053.f, 0.9f};
-    FractionalDelay fractionalDelay3 {2719.f, 1.1f};
-    FractionalDelay fractionalDelay4 {3463.f, 1.3f};
+    FractionalDelay fractionalDelay1 {1571, 0.7f};
+    FractionalDelay fractionalDelay2 {2053, 0.9f};
+    FractionalDelay fractionalDelay3 {2719, 1.1f};
+    FractionalDelay fractionalDelay4 {3463, 1.3f};
     
 //    float g11 = -1.0f;
 //    float g12 = 1.0f;
