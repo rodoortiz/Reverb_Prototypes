@@ -30,8 +30,10 @@ public:
     void setDelayTime(float delay);
     void setDelaySpeed(float speed);
     
+    float getTapDelaySample(double delaySampleInMiliSec, int channel);
+    
 private:
-    double sampleRate = 48000.f;
+    double sampleRate = 48000.0;
     
 //    FractionalDelay fractionalDelay {240.f, 0.7f};
     FractionalDelay fractionalDelay {0, 0.0f};

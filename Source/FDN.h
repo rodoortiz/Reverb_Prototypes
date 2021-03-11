@@ -36,7 +36,7 @@ public:
     
 private:
     
-    double Fs = 48000;
+    double Fs = 48000.0;
     
     FractionalDelay fractionalDelay1 {1571, 0.7f};
     FractionalDelay fractionalDelay2 {2053, 0.9f};

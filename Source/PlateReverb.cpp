@@ -11,6 +11,7 @@
 #include "PlateReverb.h"
 
 PlateReverb::PlateReverb() {
+
 }
 
 PlateReverb::~PlateReverb() {
@@ -19,6 +20,7 @@ PlateReverb::~PlateReverb() {
 
 //Should be set before preparePlateReverb, converts delay in seconds to delay in samples
 void PlateReverb::prepareDelayValues(double _sampleRate) {
+    sampleRate = _sampleRate;
     //PreDelay
     preDelayDelay = (int)(delayTimes.preDelayTime * _sampleRate);
     
@@ -32,7 +34,7 @@ void PlateReverb::prepareDelayValues(double _sampleRate) {
     
     //ModAllPassFilters
     modApf1Delay = (int)(delayTimes.modApf1DelayTime * _sampleRate);
-    modApf2Delay = (int)(delayTimes.modApf1DelayTime * _sampleRate);
+    modApf2Delay = (int)(delayTimes.modApf2DelayTime * _sampleRate);
     
     //Delays
     delay1Delay = (int)(delayTimes.delay1Time * _sampleRate);
@@ -42,8 +44,6 @@ void PlateReverb::prepareDelayValues(double _sampleRate) {
 }
 
 void PlateReverb::preparePlateReverb(double _sampleRate) {
-    sampleRate = _sampleRate;
-    
     //PreDelay
     preDelay.setSampleRate(_sampleRate);
     preDelay.setDelaySamples(preDelayDelay);
@@ -83,7 +83,10 @@ void PlateReverb::prepareAllPassFilters(APF& apf, double& sampleRate, int& delay
 }
 
 
-void PlateReverb::processPlateReverb(AudioBuffer<float>& buffer, float& depthValue) {
+void PlateReverb::processPlateReverb(AudioBuffer<float>& buffer, float& wetDryValue) {
+    wetLevel = wetDryValue;
+    dryLevel = 1 - wetDryValue;
+    
     auto audioBlock = dsp::AudioBlock<float> (buffer);
     auto context = dsp::ProcessContextReplacing<float>(audioBlock);
     process(context);
@@ -130,9 +133,57 @@ void PlateReverb::processMono (float* const samples, const int numSamples) noexc
     for (int i = 0; i < numSamples; ++i)
     {
         const float input = samples[i];
-        const float out = preDelay.processSample(input, 1);
         
-        samples[i] = (out * 0.5) + (samples[i] * 0.5);
+        //Pre Delay
+        float outPreDelay = preDelay.processSample(input, 1);
+        float outDiffusion = lpf_1.processSample(outPreDelay, 1);
+
+        //Diffusion stage
+        outDiffusion = apf_1.processSample(outDiffusion, 1);
+        outDiffusion = apf_2.processSample(outDiffusion, 1);
+        outDiffusion = apf_3.processSample(outDiffusion, 1);
+        outDiffusion = apf_4.processSample(outDiffusion, 1);
+        
+        //Input to Reverb Tanks
+        float inLeftTank = outDiffusion + outRightTank;
+        float inRightTank = outDiffusion + outLeftTank;
+        
+        //Left Tank Process
+        float tempOutLeftTank = modApf_1.processSample(inLeftTank, 1);
+        tempOutLeftTank = delay1.processSample(tempOutLeftTank, 1);
+        tempOutLeftTank = lpf_2.processSample(tempOutLeftTank, 1);
+        tempOutLeftTank = apf_5.processSample(tempOutLeftTank, 1);
+        tempOutLeftTank = delay2.processSample(tempOutLeftTank, 1);
+        outLeftTank = tempOutLeftTank * g5;
+        
+        //Right Tank Process
+        float tempOutRightTank = modApf_2.processSample(inRightTank, 1);
+        tempOutRightTank = delay3.processSample(tempOutRightTank, 1);
+        tempOutRightTank = lpf_3.processSample(tempOutRightTank, 1);
+        tempOutRightTank = apf_6.processSample(tempOutRightTank, 1);
+        tempOutRightTank = delay4.processSample(tempOutRightTank, 1);
+        outRightTank = tempOutRightTank * g5;
+        
+        //Output taps
+        float outL = delay1.getTapDelaySample(delayTaps.yL_a_1, 1)
+                    + delay1.getTapDelaySample(delayTaps.yL_a_2, 1)
+                    - apf_5.getTapDelaySample(delayTaps.yL_b, 1)
+                    + delay2.getTapDelaySample(delayTaps.yL_c, 1)
+                    - delay3.getTapDelaySample(delayTaps.yL_d, 1)
+                    - apf_6.getTapDelaySample(delayTaps.yL_e, 1)
+                    - delay4.getTapDelaySample(delayTaps.yL_f, 1);
+        
+        float outR = delay3.getTapDelaySample(delayTaps.yR_d_1, 1)
+                    + delay3.getTapDelaySample(delayTaps.yR_d_2, 1)
+                    - apf_6.getTapDelaySample(delayTaps.yR_e, 1)
+                    + delay4.getTapDelaySample(delayTaps.yR_f, 1)
+                    - delay1.getTapDelaySample(delayTaps.yR_a, 1)
+                    - apf_5.getTapDelaySample(delayTaps.yR_b, 1)
+                    - delay2.getTapDelaySample(delayTaps.yR_c, 1);
+        
+        //Output
+        float out = (outL * 0.5f) + (outR * 0.5f);
+        samples[i] = (out * wetLevel) + (samples[i] * dryLevel);
     }
 }
 
@@ -177,10 +228,24 @@ void PlateReverb::processStereo (float* const left, float* const right, const in
         outRightTank = tempOutRightTank * g5;
         
         //Output taps
+        float outL = delay1.getTapDelaySample(delayTaps.yL_a_1, 1)
+                    + delay1.getTapDelaySample(delayTaps.yL_a_2, 1)
+                    - apf_5.getTapDelaySample(delayTaps.yL_b, 1)
+                    + delay2.getTapDelaySample(delayTaps.yL_c, 1)
+                    - delay3.getTapDelaySample(delayTaps.yL_d, 1)
+                    - apf_6.getTapDelaySample(delayTaps.yL_e, 1)
+                    - delay4.getTapDelaySample(delayTaps.yL_f, 1);
         
+        float outR = delay3.getTapDelaySample(delayTaps.yR_d_1, 1)
+                    + delay3.getTapDelaySample(delayTaps.yR_d_2, 1)
+                    - apf_6.getTapDelaySample(delayTaps.yR_e, 1)
+                    + delay4.getTapDelaySample(delayTaps.yR_f, 1)
+                    - delay1.getTapDelaySample(delayTaps.yR_a, 1)
+                    - apf_5.getTapDelaySample(delayTaps.yR_b, 1)
+                    - delay2.getTapDelaySample(delayTaps.yR_c, 1);
         
         //Output
-        left[i] = (outDiffusion * 0.5) + (left[i] * 0.5) ;
-        right[i] = (outDiffusion * 0.5) + (right[i] * 0.5);
+        left[i] = (outL * wetLevel) + (left[i] * dryLevel) ;
+        right[i] = (outR * wetLevel) + (right[i] * dryLevel);
     }
 }

@@ -18,44 +18,48 @@
 class PlateReverb {
 public:
     struct DelayTimes {
+        double convertionSR = 29800.0; //Sample rate value for conversion
+        
         //Values in milliseconds
-        double preDelayTime = 0.185;
+        double preDelayTime = 0.150;
         
-        double apf1DelayTime = 0.00476;
-        double apf2DelayTime = 0.00359;
-        double apf3DelayTime = 0.01271;
-        double apf4DelayTime = 0.00929;
-        double apf5DelayTime = 0.08912;
-        double apf6DelayTime = 0.00604;
+        double apf1DelayTime = (142.0 / convertionSR);
+        double apf2DelayTime = (107.0 / convertionSR);
+        double apf3DelayTime = (379.0 / convertionSR);
+        double apf4DelayTime = (277.0 / convertionSR);
+        double apf5DelayTime = (2656.0 / convertionSR);
+        double apf6DelayTime = (1800.0 / convertionSR);
         
-        double modApf1DelayTime = 0.03046;
-        double modApf2DelayTime = 0.02255;
+        double modApf1DelayTime = (908.0 / convertionSR);
+        double modApf2DelayTime = (672.0 / convertionSR);
         
-        double delay1Time = 0.14151;
-        double delay2Time = 0.14942;
-        double delay3Time = 0.10523;
-        double delay4Time = 0.12483;
+        double delay1Time = (4217.0 / convertionSR);
+        double delay2Time = (4453.0 / convertionSR);
+        double delay3Time = (3136.0 / convertionSR);
+        double delay4Time = (3720.0 / convertionSR);
         
     } delayTimes;
     
     struct DelayTaps {
+        double convertionSR = 29800.0; //Sample rate value for conversion
+        
         //Look name reference in Will Pirkle Book pg.476
         //Values in milliseconds
-        double yL_a_1 = 0.00892;
-        double yL_a_2 = 0.09979;
-        double yL_b = 0.06419;
-        double yL_c = 0.06697;
-        double yL_d = 0.06677;
-        double yL_e = 0.00627;
-        double yL_f = 0.03577;
+        double yL_a_1 = (266.0 / convertionSR);
+        double yL_a_2 = (2974.0 / convertionSR);
+        double yL_b = (1913.0 / convertionSR);
+        double yL_c = (1996.0 / convertionSR);
+        double yL_d = (1990.0 / convertionSR);
+        double yL_e = (187.0 / convertionSR);
+        double yL_f = (1066.0 / convertionSR);
         
-        double yR_d_1 = 0.01184;
-        double yR_d_2 = 0.12171;
-        double yR_e = 0.04120;
-        double yR_f = 0.08969;
-        double yR_a = 0.07083;
-        double yR_b = 0.01124;
-        double yR_c = 0.00406;
+        double yR_d_1 = (353.0 / convertionSR);
+        double yR_d_2 = (3627.0 / convertionSR);
+        double yR_e = (1228.0 / convertionSR);
+        double yR_f = (2673.0 / convertionSR);
+        double yR_a = (2111.0 / convertionSR);
+        double yR_b = (335.0 / convertionSR);
+        double yR_c = (121.0 / convertionSR);
         
     } delayTaps;
     
@@ -66,7 +70,7 @@ public:
     void preparePlateReverb(double _sampleRate);
     void prepareAllPassFilters(APF& apf, double& sampleRate, int& delay, float depth, float speed, float gain);
     
-    void processPlateReverb(AudioBuffer<float>& buffer, float& depthValue);
+    void processPlateReverb(AudioBuffer<float>& buffer, float& wetDryValue);
     
     template <typename ProcessContext>
     void process (const ProcessContext& context) noexcept;
@@ -75,7 +79,10 @@ public:
     void processStereo (float* const left, float* const right, const int numSamples) noexcept;
     
 private:
-    double sampleRate = 48000;
+    double sampleRate = 48000.0;
+    
+    float wetLevel = 0.0f;
+    float dryLevel = 0.0f;
     
     //Delays in samples
     int preDelayDelay;
@@ -83,7 +90,7 @@ private:
     int modApf1Delay, modApf2Delay;
     int delay1Delay, delay2Delay, delay3Delay, delay4Delay;
     //Gains
-    float g1{0.75f}, g2{0.625f}, g3{0.5f}, g4{-0.7f}, g5{0.5f};
+    float g1{0.75f}, g2{0.625f}, g3{0.5f}, g4{-0.7f}, g5{0.3f};
     
     float outLeftTank{0.0f}, outRightTank{0.0f};
     

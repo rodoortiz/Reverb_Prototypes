@@ -29,20 +29,18 @@ public:
     void setSpeed(float speed);
     void setDepth(float depth);
     
-    float getDelaySampleAtMiliSec(double delaySampleAtMiliSec);
+    float getTapDelaySample(double delaySampleInMiliSec, int channel);
 
     
 private:
     
-    double sampleRate = 48000; //Sampling Rate
+    double sampleRate = 48000.0; //Sampling Rate
     
     int delay = 0;
     
     const int MAX_BUFFER_SIZE = 96000;
     float delayBuffer[96000][2] = {0.0f};
     int index[2] = {0};
-    int indexD1{0}, indexD2{0};
-    
     
     float speed = 1.0f; // Hz, frequency of LFO
     float depth = 10.0f; // percentage of intensity, control amp of LFO

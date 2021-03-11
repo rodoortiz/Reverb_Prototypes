@@ -59,3 +59,7 @@ void APF::setDelayTime(float delay) {
 void APF::setDelaySpeed(float speed) {
     fractionalDelay.setSpeed(speed);
 }
+
+float APF::getTapDelaySample(double delaySampleInMiliSec, int channel) {
+    return fractionalDelay.getTapDelaySample(delaySampleInMiliSec, channel);
+}

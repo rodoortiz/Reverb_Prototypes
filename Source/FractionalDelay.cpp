@@ -49,12 +49,12 @@ float FractionalDelay::processSample(float x, int channel){
         float g2 = (float)delay + lfo - (float)d1;
         float g1 = 1.0f - g2;
         
-        indexD1 = index[channel] - d1;
+        int indexD1 = index[channel] - d1;
         if (indexD1 < 0){
             indexD1 += MAX_BUFFER_SIZE;
         }
         
-        indexD2 = index[channel] - d2;
+        int indexD2 = index[channel] - d2;
         if (indexD2 < 0){
             indexD2 += MAX_BUFFER_SIZE;
         }
@@ -101,7 +101,13 @@ void FractionalDelay::setDepth(float depth){
     this->depth = depth;
 }
 
-float FractionalDelay::getDelaySampleAtMiliSec(double delaySampleAtMiliSec) {
-    int delaySamplePos = delaySampleAtMiliSec * sampleRate; //Convert from mili seconds to samples and give sample position to obtain
+float FractionalDelay::getTapDelaySample(double delaySampleAtMiliSec, int channel) {
+    int delaySamplePos = (int)(delaySampleAtMiliSec * sampleRate); //Convert from mili seconds to samples and get sample position to obtain
+    int readIndex = (index[channel] - 1) - delaySamplePos;
     
+    if (readIndex < 0){
+        readIndex += MAX_BUFFER_SIZE; //Wrap Index
+    }
+    
+    return delayBuffer[readIndex][channel];
 }
