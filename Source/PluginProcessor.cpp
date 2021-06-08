@@ -95,6 +95,11 @@ void AlgoReverbAudioProcessor::changeProgramName (int index, const String& newNa
 //==============================================================================
 void AlgoReverbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    dsp::ProcessSpec spec;
+    spec.sampleRate = sampleRate;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.numChannels = getTotalNumOutputChannels();
+    
 //    predelay.setFs(sampleRate);
 //    predelay.setDelaySamples(0.0f);
 ////    fdn.setFs(sampleRate);
@@ -104,6 +109,7 @@ void AlgoReverbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 //    Fs = sampleRate;
     
     //PLATE REVERB
+    plateReverb.prepareJuceDspModules(spec);
     plateReverb.prepareDelayValues(sampleRate);
     plateReverb.preparePlateReverb(sampleRate);
 }
@@ -183,8 +189,7 @@ void AlgoReverbAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 //    }
     
     //PLATE REVERB
-    plateReverb.processPlateReverb(buffer, wet);
-        
+    plateReverb.processPlateReverb(buffer, wet, bandwithValue, dampingValue, decayValue);        
 }
 
 //==============================================================================

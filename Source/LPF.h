@@ -11,9 +11,10 @@
 #pragma once
 
 //Feed-Forward
-class FirstOrderLPF {
+class FirstOrderLPFff {
 public:
-    float processSample(float input, int channel) {
+    float processSample(float input, int channel)
+    {
         float output = (0.5f * input) + (0.5f * feedForward[channel]); //Differential equation
         feedForward[channel] = input;
         return output;
@@ -26,12 +27,19 @@ private:
 //Feedback
 class FirstOrderLPFfb {
 public:
-    float processSample(float input, int channel) {
-        float output = (0.5f * input) - (-0.5f * feedBack[channel]); //Differential equation
+    float processSample(float input, int channel)
+        {
+        float output = (gain * input) + ((1 - gain) * feedBack[channel]); //Differential equation
         feedBack[channel] = output;
         return output;
+    }
+    
+    void setGain(float newGain)
+    {
+        this->gain = newGain;
     }
 
 private:
     float feedBack[2] = {0.0f}; //Previous output value into feedback
+    float gain;
 };

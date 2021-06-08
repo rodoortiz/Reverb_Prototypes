@@ -32,9 +32,11 @@ private:
     
     Slider reverbTimeSlider, modulationSlider, wetDrySlider;
     Slider predelaySlider, diffusionSlider, lowPassFilterSlider;
+    Slider decaySlider, dampingSlider, bandwithSlider;
     
     Label reverbTimeLabel, modulationLabel, wetDryLabel;
     Label predelayLabel, diffusionLabel, lowPassFilterLabel;
+    Label decayLabel, dampingLabel, bandwithLabel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AlgoReverbAudioProcessorEditor)
 };

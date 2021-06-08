@@ -15,7 +15,7 @@
 AlgoReverbAudioProcessorEditor::AlgoReverbAudioProcessorEditor (AlgoReverbAudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p)
 {
-    setSize (400, 300);
+    setSize (500, 300);
     
     //Reverb Time Slider
     reverbTimeSlider.addListener(this);
@@ -100,6 +100,48 @@ AlgoReverbAudioProcessorEditor::AlgoReverbAudioProcessorEditor (AlgoReverbAudioP
     lowPassFilterLabel.attachToComponent(&lowPassFilterSlider, false);
     lowPassFilterLabel.setJustificationType(Justification::centred);
     addAndMakeVisible(lowPassFilterLabel);
+    
+    //Decay Slider
+    decaySlider.addListener(this);
+    decaySlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    decaySlider.setBounds(400, 0, 100, 100);
+    decaySlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 30);
+    decaySlider.setRange(0.0f, 0.99f, 0.01f);
+    decaySlider.setValue(0.5f);
+    addAndMakeVisible(decaySlider);
+    
+    decayLabel.setText("Decay", dontSendNotification);
+    decayLabel.attachToComponent(&decaySlider, false);
+    decayLabel.setJustificationType(Justification::centred);
+    addAndMakeVisible(decayLabel);
+    
+    //Damping Slider
+    dampingSlider.addListener(this);
+    dampingSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    dampingSlider.setBounds(400, 100, 100, 100);
+    dampingSlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 30);
+    dampingSlider.setRange(0.0f, 0.99f, 0.01f);
+    dampingSlider.setValue(0.5f);
+    addAndMakeVisible(dampingSlider);
+    
+    dampingLabel.setText("Damping", dontSendNotification);
+    dampingLabel.attachToComponent(&dampingSlider, false);
+    dampingLabel.setJustificationType(Justification::centred);
+    addAndMakeVisible(dampingLabel);
+    
+    //Bandwith Slider
+    bandwithSlider.addListener(this);
+    bandwithSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    bandwithSlider.setBounds(400, 200, 100, 100);
+    bandwithSlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 30);
+    bandwithSlider.setRange(0.0f, 0.99f, 0.01f);
+    bandwithSlider.setValue(0.5f);
+    addAndMakeVisible(bandwithSlider);
+    
+    bandwithLabel.setText("Bandwith", dontSendNotification);
+    bandwithLabel.attachToComponent(&bandwithSlider, false);
+    bandwithLabel.setJustificationType(Justification::centred);
+    addAndMakeVisible(bandwithLabel);
 }
 
 AlgoReverbAudioProcessorEditor::~AlgoReverbAudioProcessorEditor()
@@ -140,5 +182,17 @@ void AlgoReverbAudioProcessorEditor::sliderValueChanged(Slider* slider) {
     
     if (slider == &diffusionSlider) {
         processor.diffusionValue = diffusionSlider.getValue();
+    }
+    
+    if (slider == &decaySlider) {
+        processor.decayValue = decaySlider.getValue();
+    }
+    
+    if (slider == &dampingSlider) {
+        processor.dampingValue = dampingSlider.getValue();
+    }
+    
+    if (slider == &bandwithSlider) {
+        processor.bandwithValue = bandwithSlider.getValue();
     }
 }

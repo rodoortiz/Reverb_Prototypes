@@ -65,6 +65,9 @@ public:
     float timeValue = 0.5f;
     float modValue = 1.f;
     float diffusionValue = 0.5f;
+    float bandwithValue = 0.5f;
+    float dampingValue = 0.5f;
+    float decayValue = 0.5f;
     
 private:
 //    FractionalDelay predelay;
@@ -76,6 +79,7 @@ private:
     
     //PLATE REVERB
     PlateReverb plateReverb;
+    APF apf;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AlgoReverbAudioProcessor)
