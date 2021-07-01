@@ -32,6 +32,11 @@
       <FILE id="EPub9t" name="PlateReverb.cpp" compile="1" resource="0" file="Source/PlateReverb.cpp"/>
       <FILE id="VP1Ez9" name="PlateReverb.h" compile="0" resource="0" file="Source/PlateReverb.h"/>
     </GROUP>
+    <GROUP id="{06749F55-6EB3-EC19-A0DB-1F8C94DD88CC}" name="Custom Reverb">
+      <FILE id="lbcmIp" name="ReverbCustom.h" compile="0" resource="0" file="Source/ReverbCustom.h"/>
+      <FILE id="VG5G0w" name="ReverbProcessorCustom.h" compile="0" resource="0"
+            file="Source/ReverbProcessorCustom.h"/>
+    </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>

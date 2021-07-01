@@ -92,7 +92,6 @@ void PlateReverb::prepareJuceDspModules(const dsp::ProcessSpec& spec)
 {
     lpf_bandwith.prepare(spec);
     lpf_bandwith.setType(juce::dsp::FirstOrderTPTFilterType::lowpass);
-    lpf_bandwith.setCutoffFrequency(10000.0f);
 }
 
 void PlateReverb::processPlateReverb(AudioBuffer<float>& buffer, float& wetDryValue, float& bwValue, float& dampingValue, float& decayValue)
@@ -104,9 +103,9 @@ void PlateReverb::processPlateReverb(AudioBuffer<float>& buffer, float& wetDryVa
     damping = dampingValue;
     decay = decayValue;
     
-    lpf_1.setGain(bandwith);
-    lpf_2.setGain(1 - damping);
-    lpf_3.setGain(1 - damping);
+    lpf_1.setFeedbackGain(bandwith);
+    lpf_2.setFeedbackGain(1 - damping);
+    lpf_3.setFeedbackGain(1 - damping);
     g5 = decay; 
     
     auto audioBlock = dsp::AudioBlock<float> (buffer);
@@ -160,8 +159,8 @@ void PlateReverb::processMono (float* const samples, const int numSamples) noexc
         float outPreDelay = preDelay.processSample(input, 1);
 //        float outPreDelay = preDelay_1.processSample(input, 1);
         
-        float outLPF = lpf_1.processSample(outPreDelay, 1);
-//        float outLPF = lpf_bandwith.processSample(0, outPreDelay);
+//        float outLPF = lpf_1.processSample(outPreDelay, 1);
+        float outLPF = lpf_bandwith.processSample(0, outPreDelay);
 
         //Diffusion stage
         float outDiffusion = apf_1.processSample(outLPF, 1);
@@ -228,8 +227,8 @@ void PlateReverb::processStereo (float* const left, float* const right, const in
         float outPreDelay = preDelay.processSample(input, 1);
 //        float outPreDelay = preDelay_1.processSample(input, 1);
         
-        float outLPF = lpf_1.processSample(outPreDelay, 1);
-//        float outLPF = lpf_bandwith.processSample(0, outPreDelay);
+//        float outLPF = lpf_1.processSample(outPreDelay, 1);
+        float outLPF = lpf_bandwith.processSample(0, outPreDelay);
 
         //Diffusion stage
         float outDiffusion = apf_1.processSample(outLPF, 1);
@@ -280,4 +279,9 @@ void PlateReverb::processStereo (float* const left, float* const right, const in
         left[i] = (outL * wetLevel) + (left[i] * dryLevel) ;
         right[i] = (outR * wetLevel) + (right[i] * dryLevel);
     }
+}
+
+void PlateReverb::setFiltersCutoffFreq(float& cutOffValue)
+{
+    lpf_bandwith.setCutoffFrequency(cutOffValue);
 }

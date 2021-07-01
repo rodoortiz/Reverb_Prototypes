@@ -112,6 +112,13 @@ void AlgoReverbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     plateReverb.prepareJuceDspModules(spec);
     plateReverb.prepareDelayValues(sampleRate);
     plateReverb.preparePlateReverb(sampleRate);
+    
+    //JUCE REVERB
+    reverbJuce.prepare(spec);
+    
+    //JUCE REVERB CUSTOM
+    reverbJuceCustom.prepare(spec);
+    
 }
 
 void AlgoReverbAudioProcessor::releaseResources()
@@ -188,8 +195,28 @@ void AlgoReverbAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 //        }
 //    }
     
-    //PLATE REVERB
-    plateReverb.processPlateReverb(buffer, wet, bandwithValue, dampingValue, decayValue);        
+    // PLATE REVERB
+    plateReverb.setFiltersCutoffFreq(lowpassValue);
+    plateReverb.processPlateReverb(buffer, wet, bandwithValue, dampingValue, decayValue);
+    
+    //JUCE REVERB
+//    reverbJuceParameters.dryLevel = 1 - wet;
+//    reverbJuceParameters.wetLevel = wet;
+//    reverbJuce.setParameters(reverbJuceParameters);
+//
+//    auto audioBlock = juce::dsp::AudioBlock<float> (buffer);
+//    auto context = juce::dsp::ProcessContextReplacing<float> (audioBlock);
+//    reverbJuce.process(context);
+    
+    //JUCE REVERB CUSTOM
+//    reverbJuceCustomParameters.dryLevel = 1 - wet;
+//    reverbJuceCustomParameters.wetLevel = wet;
+//    reverbJuceCustom.setParameters(reverbJuceCustomParameters);
+//    reverbJuceCustom.setCutoffFreq(lowpassValue);
+//
+//    auto audioBlock = juce::dsp::AudioBlock<float> (buffer);
+//    auto context = juce::dsp::ProcessContextReplacing<float> (audioBlock);
+//    reverbJuceCustom.process(context);
 }
 
 //==============================================================================

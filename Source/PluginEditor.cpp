@@ -92,7 +92,7 @@ AlgoReverbAudioProcessorEditor::AlgoReverbAudioProcessorEditor (AlgoReverbAudioP
     lowPassFilterSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     lowPassFilterSlider.setBounds(250, 175, 100, 100);
     lowPassFilterSlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 30);
-    lowPassFilterSlider.setRange(1000.0f, 20000.0f, 1.0f);
+    lowPassFilterSlider.setRange(500.0f, 20000.0f, 1.0f);
     lowPassFilterSlider.setValue(10000.0f);
     addAndMakeVisible(lowPassFilterSlider);
     
@@ -164,35 +164,30 @@ void AlgoReverbAudioProcessorEditor::resized()
 }
 
 void AlgoReverbAudioProcessorEditor::sliderValueChanged(Slider* slider) {
-    if (slider == &predelaySlider) {
+    if (slider == &predelaySlider)
         processor.predelayMS = predelaySlider.getValue();
-    }
     
-    if (slider == &wetDrySlider) {
+    if (slider == &wetDrySlider)
         processor.wet = wetDrySlider.getValue();
-    }
-    
-    if (slider == &reverbTimeSlider) {
+
+    if (slider == &reverbTimeSlider)
         processor.timeValue = reverbTimeSlider.getValue();
-    }
     
-    if (slider == &modulationSlider) {
+    if (slider == &modulationSlider)
         processor.modValue = modulationSlider.getValue();
-    }
     
-    if (slider == &diffusionSlider) {
+    if (slider == &diffusionSlider)
         processor.diffusionValue = diffusionSlider.getValue();
-    }
     
-    if (slider == &decaySlider) {
+    if (slider == &lowPassFilterSlider)
+        processor.lowpassValue = lowPassFilterSlider.getValue();
+    
+    if (slider == &decaySlider)
         processor.decayValue = decaySlider.getValue();
-    }
     
-    if (slider == &dampingSlider) {
+    if (slider == &dampingSlider)
         processor.dampingValue = dampingSlider.getValue();
-    }
     
-    if (slider == &bandwithSlider) {
+    if (slider == &bandwithSlider)
         processor.bandwithValue = bandwithSlider.getValue();
-    }
 }

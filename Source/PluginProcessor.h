@@ -16,6 +16,7 @@
 #include "APF.h"
 #include "Schroeder.h"
 #include "PlateReverb.h"
+#include "ReverbCustom.h"
 
 //==============================================================================
 /**
@@ -68,6 +69,7 @@ public:
     float bandwithValue = 0.5f;
     float dampingValue = 0.5f;
     float decayValue = 0.5f;
+    float lowpassValue = 1000.0f;
     
 private:
 //    FractionalDelay predelay;
@@ -80,6 +82,14 @@ private:
     //PLATE REVERB
     PlateReverb plateReverb;
     APF apf;
+    
+    //JUCE REVERB
+    dsp::Reverb reverbJuce;
+    dsp::Reverb::Parameters reverbJuceParameters;
+    
+    //JUCE REVERB CUSTOM
+    ReverbCustom reverbJuceCustom;
+    ReverbCustom::Parameters reverbJuceCustomParameters;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AlgoReverbAudioProcessor)

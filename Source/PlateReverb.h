@@ -80,6 +80,8 @@ public:
     void processMono (float* const samples, const int numSamples) noexcept;
     void processStereo (float* const left, float* const right, const int numSamples) noexcept;
     
+    void setFiltersCutoffFreq(float& cutOffValue);
+    
 private:
     double sampleRate = 48000.0;
     
@@ -102,10 +104,25 @@ private:
     
     //Modules
     dsp::FirstOrderTPTFilter<float> lpf_bandwith;
+    
 //    SimpleDelay preDelay_1{0};
     FractionalDelay preDelay{0, 0.0f, 0.0f};
-    FractionalDelay delay1{0, 0.0f, 0.0f}, delay2{0, 0.0f, 0.0f}, delay3{0, 0.0f, 0.0f}, delay4{0, 0.0f, 0.0f};
-    FirstOrderLPFfb lpf_1, lpf_2, lpf_3;
-    APF apf_1, apf_2, apf_3, apf_4, apf_5, apf_6;
-    APF modApf_1, modApf_2;
+    FractionalDelay delay1{0, 0.0f, 0.0f};
+    FractionalDelay delay2{0, 0.0f, 0.0f};
+    FractionalDelay delay3{0, 0.0f, 0.0f};
+    FractionalDelay delay4{0, 0.0f, 0.0f};
+    
+    FirstOrderLPFfb lpf_1;
+    FirstOrderLPFfb lpf_2;
+    FirstOrderLPFfb lpf_3;
+    
+    APF apf_1;
+    APF apf_2;
+    APF apf_3;
+    APF apf_4;
+    APF apf_5;
+    APF apf_6;
+    
+    APF modApf_1;
+    APF modApf_2;
 };

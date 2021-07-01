@@ -34,7 +34,7 @@ public:
         return output;
     }
     
-    void setGain(float newGain)
+    void setFeedbackGain(float newGain)
     {
         this->gain = newGain;
     }
