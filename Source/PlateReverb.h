@@ -85,44 +85,63 @@ public:
 private:
     double sampleRate = 48000.0;
     
+    //PARAMETERS
     float wetLevel = 0.0f;
     float dryLevel = 0.0f;
     float bandwith = 0.5f;
     float damping = 0.5f;
     float decay = 0.5f;
     
-    //Delays in samples
+    //DELAYS (IN SAMPLES)
     int preDelayDelay;
-    int apf1Delay, apf2Delay, apf3Delay, apf4Delay, apf5Delay, apf6Delay;
-    int modApf1Delay, modApf2Delay;
-    int delay1Delay, delay2Delay, delay3Delay, delay4Delay;
+    //AllPass
+    int apf1Delay;
+    int apf2Delay;
+    int apf3Delay;
+    int apf4Delay;
+    int apf5Delay;
+    int apf6Delay;
     
-    //Gains
-    float g1{0.75f}, g2{0.625f}, g3{0.5f}, g4{-0.7f}, g5{0.3f};
+    int modApf1Delay;
+    int modApf2Delay;
     
-    float outLeftTank{0.0f}, outRightTank{0.0f};
+    int delay1Delay;
+    int delay2Delay;
+    int delay3Delay;
+    int delay4Delay;
     
-    //Modules
-    dsp::FirstOrderTPTFilter<float> lpf_bandwith;
+    //GAINS
+    float g1 {0.75f};
+    float g2 {0.625f};
+    float g3 {0.5f};
+    float g4 {-0.7f};
+    float g5 {0.3f};
     
+    float outLeftTank {0.0f};
+    float outRightTank {0.0f};
+    
+    //MODULES
+    dsp::FirstOrderTPTFilter<float> lpf_bandwith; //Filter used instead of lpf_1, we can change cutoffFreq with this one
+    
+    //Delays
 //    SimpleDelay preDelay_1{0};
     FractionalDelay preDelay{0, 0.0f, 0.0f};
     FractionalDelay delay1{0, 0.0f, 0.0f};
     FractionalDelay delay2{0, 0.0f, 0.0f};
     FractionalDelay delay3{0, 0.0f, 0.0f};
     FractionalDelay delay4{0, 0.0f, 0.0f};
-    
+    //LowPass Filters
     FirstOrderLPFfb lpf_1;
     FirstOrderLPFfb lpf_2;
     FirstOrderLPFfb lpf_3;
-    
+    //AllPass Filters
     APF apf_1;
     APF apf_2;
     APF apf_3;
     APF apf_4;
     APF apf_5;
     APF apf_6;
-    
+    //AllPass Filters Modulated
     APF modApf_1;
     APF modApf_2;
 };

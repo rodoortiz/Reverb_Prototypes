@@ -61,15 +61,9 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    float predelayMS = 0.0f;
-    float wet = 0.5f;
-    float timeValue = 0.5f;
-    float modValue = 1.f;
-    float diffusionValue = 0.5f;
-    float bandwithValue = 0.5f;
-    float dampingValue = 0.5f;
-    float decayValue = 0.5f;
-    float lowpassValue = 1000.0f;
+    //AudioProcessorValueTreeState
+    AudioProcessorValueTreeState apvts;
+    static AudioProcessorValueTreeState::ParameterLayout parameterLayout();
     
 private:
 //    FractionalDelay predelay;

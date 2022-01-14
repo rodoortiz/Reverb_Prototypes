@@ -8,6 +8,11 @@
   ==============================================================================
 */
 
+/*
+  Customized Reverb taken from JUCE reverb.
+  Added a LPF inside it.
+*/
+
 #pragma once
 
 #include <JuceHeader.h>

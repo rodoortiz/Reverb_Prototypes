@@ -15,133 +15,88 @@
 AlgoReverbAudioProcessorEditor::AlgoReverbAudioProcessorEditor (AlgoReverbAudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p)
 {
-    setSize (500, 300);
+    // Reverb Time Slider
+    reverbTimeSlider = std::make_unique<Slider>();
+    setSlider(reverbTimeSlider.get());
+    timeAttach = std::make_unique<sliderAttachment>(processor.apvts, "TIME", *reverbTimeSlider);
     
-    //Reverb Time Slider
-    reverbTimeSlider.addListener(this);
-    reverbTimeSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    reverbTimeSlider.setBounds(50, 30, 100, 100);
-    reverbTimeSlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 30);
-    reverbTimeSlider.setRange(0.4f, 0.7f, 0.01f);
-    reverbTimeSlider.setValue(0.5f);
-    addAndMakeVisible(reverbTimeSlider);
+    reverbTimeLabel = std::make_unique<Label>();
+    reverbTimeLabel->attachToComponent(reverbTimeSlider.get(), false);
+    setLabel(reverbTimeLabel.get(), "Time");
+
+    // Modulation Slider
+    modulationSlider = std::make_unique<Slider>();
+    setSlider(modulationSlider.get());
+    modAttach = std::make_unique<sliderAttachment>(processor.apvts, "MOD", *modulationSlider);
+
+    modulationLabel = std::make_unique<Label>();
+    modulationLabel->attachToComponent(modulationSlider.get(), false);
+    setLabel(modulationLabel.get(), "Mod");
     
-    reverbTimeLabel.setText("Time", dontSendNotification);
-    reverbTimeLabel.attachToComponent(&reverbTimeSlider, false);
-    reverbTimeLabel.setJustificationType(Justification::centred);
-    addAndMakeVisible(reverbTimeLabel);
+    // WetDry Slider
+    wetDrySlider = std::make_unique<Slider>();
+    setSlider(wetDrySlider.get());
+    wetDryAttach = std::make_unique<sliderAttachment>(processor.apvts, "DRYWET", *wetDrySlider);
+
+    wetDryLabel = std::make_unique<Label>();
+    wetDryLabel->attachToComponent(wetDrySlider.get(), false);
+    setLabel(wetDryLabel.get(), "Wet/Dry");
+
+    // Predelay Slider
+    predelaySlider = std::make_unique<Slider>();
+    setSlider(predelaySlider.get());
+    preDelayAttach = std::make_unique<sliderAttachment>(processor.apvts, "PREDELAY", *predelaySlider);
+
+    predelayLabel = std::make_unique<Label>();
+    predelayLabel->attachToComponent(predelaySlider.get(), false);
+    setLabel(predelayLabel.get(), "PreDelay");
     
-    //Modulation Slider
-    modulationSlider.addListener(this);
-    modulationSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    modulationSlider.setBounds(150, 30, 100, 100);
-    modulationSlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 30);
-    modulationSlider.setRange(1.0f, 10.0f, 0.01f);
-    modulationSlider.setValue(1.0f);
-    addAndMakeVisible(modulationSlider);
+    // Diffusion Slider
+    diffusionSlider = std::make_unique<Slider>();
+    setSlider(diffusionSlider.get());
+    diffusionAttach = std::make_unique<sliderAttachment>(processor.apvts, "DIFFUSION", *diffusionSlider);
     
-    modulationLabel.setText("Mod", dontSendNotification);
-    modulationLabel.attachToComponent(&modulationSlider, false);
-    modulationLabel.setJustificationType(Justification::centred);
-    addAndMakeVisible(modulationLabel);
+    diffusionLabel = std::make_unique<Label>();
+    diffusionLabel->attachToComponent(diffusionSlider.get(), false);
+    setLabel(diffusionLabel.get(), "Diffusion");
     
-    //WetDry Slider
-    wetDrySlider.addListener(this);
-    wetDrySlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    wetDrySlider.setBounds(250, 30, 100, 100);
-    wetDrySlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 30);
-    wetDrySlider.setRange(0.0f, 1.0f, 0.01f);
-    wetDrySlider.setValue(0.5f);
-    addAndMakeVisible(wetDrySlider);
+    // LowPass Filter Slider
+    lowPassFilterSlider = std::make_unique<Slider>();
+    setSlider(lowPassFilterSlider.get());
+    lpfAttach = std::make_unique<sliderAttachment>(processor.apvts, "LPF", *lowPassFilterSlider);
     
-    wetDryLabel.setText("Wet/Dry", dontSendNotification);
-    wetDryLabel.attachToComponent(&wetDrySlider, false);
-    wetDryLabel.setJustificationType(Justification::centred);
-    addAndMakeVisible(wetDryLabel);
+    lowPassFilterLabel = std::make_unique<Label>();
+    lowPassFilterLabel->attachToComponent(lowPassFilterSlider.get(), false);
+    setLabel(lowPassFilterLabel.get(), "LowPass");
+
+    // Decay Slider
+    decaySlider = std::make_unique<Slider>();
+    setSlider(decaySlider.get());
+    decayAttach = std::make_unique<sliderAttachment>(processor.apvts, "DECAY", *decaySlider);
+
+    decayLabel = std::make_unique<Label>();
+    decayLabel->attachToComponent(decaySlider.get(), false);
+    setLabel(decayLabel.get(), "Decay");
+
+    // Damping Slider
+    dampingSlider = std::make_unique<Slider>();
+    setSlider(dampingSlider.get());
+    dampingAttach = std::make_unique<sliderAttachment>(processor.apvts, "DAMPING", *dampingSlider);
     
-    //Predelay Slider
-    predelaySlider.addListener(this);
-    predelaySlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    predelaySlider.setBounds(50, 175, 100, 100);
-    predelaySlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 30);
-    predelaySlider.setRange(0.0f, 200.0f, 0.1f);
-    predelaySlider.setValue(0.0f);
-    addAndMakeVisible(predelaySlider);
+    dampingLabel = std::make_unique<Label>();
+    dampingLabel->attachToComponent(dampingSlider.get(), false);
+    setLabel(dampingLabel.get(), "Damping");
     
-    predelayLabel.setText("PreDelay", dontSendNotification);
-    predelayLabel.attachToComponent(&predelaySlider, false);
-    predelayLabel.setJustificationType(Justification::centred);
-    addAndMakeVisible(predelayLabel);
+    // Bandwith Slider
+    bandwidthSlider = std::make_unique<Slider>();
+    setSlider(bandwidthSlider.get());
+    bandwidthAttach = std::make_unique<sliderAttachment>(processor.apvts, "BANDWIDTH", *bandwidthSlider);
     
-    //Diffusion Slider
-    diffusionSlider.addListener(this);
-    diffusionSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    diffusionSlider.setBounds(150, 175, 100, 100);
-    diffusionSlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 30);
-    diffusionSlider.setRange(0.2f, 0.8f, 0.01f);
-    diffusionSlider.setValue(0.5f);
-    addAndMakeVisible(diffusionSlider);
-    
-    diffusionLabel.setText("Diffusion", dontSendNotification);
-    diffusionLabel.attachToComponent(&diffusionSlider, false);
-    diffusionLabel.setJustificationType(Justification::centred);
-    addAndMakeVisible(diffusionLabel);
-    
-    //LowPass Filter Slider
-    lowPassFilterSlider.addListener(this);
-    lowPassFilterSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    lowPassFilterSlider.setBounds(250, 175, 100, 100);
-    lowPassFilterSlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 30);
-    lowPassFilterSlider.setRange(500.0f, 20000.0f, 1.0f);
-    lowPassFilterSlider.setValue(10000.0f);
-    addAndMakeVisible(lowPassFilterSlider);
-    
-    lowPassFilterLabel.setText("LowPass", dontSendNotification);
-    lowPassFilterLabel.attachToComponent(&lowPassFilterSlider, false);
-    lowPassFilterLabel.setJustificationType(Justification::centred);
-    addAndMakeVisible(lowPassFilterLabel);
-    
-    //Decay Slider
-    decaySlider.addListener(this);
-    decaySlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    decaySlider.setBounds(400, 0, 100, 100);
-    decaySlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 30);
-    decaySlider.setRange(0.0f, 0.99f, 0.01f);
-    decaySlider.setValue(0.5f);
-    addAndMakeVisible(decaySlider);
-    
-    decayLabel.setText("Decay", dontSendNotification);
-    decayLabel.attachToComponent(&decaySlider, false);
-    decayLabel.setJustificationType(Justification::centred);
-    addAndMakeVisible(decayLabel);
-    
-    //Damping Slider
-    dampingSlider.addListener(this);
-    dampingSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    dampingSlider.setBounds(400, 100, 100, 100);
-    dampingSlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 30);
-    dampingSlider.setRange(0.0f, 0.99f, 0.01f);
-    dampingSlider.setValue(0.5f);
-    addAndMakeVisible(dampingSlider);
-    
-    dampingLabel.setText("Damping", dontSendNotification);
-    dampingLabel.attachToComponent(&dampingSlider, false);
-    dampingLabel.setJustificationType(Justification::centred);
-    addAndMakeVisible(dampingLabel);
-    
-    //Bandwith Slider
-    bandwithSlider.addListener(this);
-    bandwithSlider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    bandwithSlider.setBounds(400, 200, 100, 100);
-    bandwithSlider.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 30);
-    bandwithSlider.setRange(0.0f, 0.99f, 0.01f);
-    bandwithSlider.setValue(0.5f);
-    addAndMakeVisible(bandwithSlider);
-    
-    bandwithLabel.setText("Bandwith", dontSendNotification);
-    bandwithLabel.attachToComponent(&bandwithSlider, false);
-    bandwithLabel.setJustificationType(Justification::centred);
-    addAndMakeVisible(bandwithLabel);
+    bandwithLabel = std::make_unique<Label>();
+    bandwithLabel->attachToComponent(bandwidthSlider.get(), false);
+    setLabel(bandwithLabel.get(), "Bandwidth");
+
+    setSize (500, 400);
 }
 
 AlgoReverbAudioProcessorEditor::~AlgoReverbAudioProcessorEditor()
@@ -160,34 +115,35 @@ void AlgoReverbAudioProcessorEditor::paint (Graphics& g)
 
 void AlgoReverbAudioProcessorEditor::resized()
 {
+    reverbTimeSlider->setBounds(50, 30, 100, 100);
     
+    modulationSlider->setBounds(150, 30, 100, 100);
+    
+    wetDrySlider->setBounds(250, 30, 100, 100);
+    
+    predelaySlider->setBounds(50, 175, 100, 100);
+
+    diffusionSlider->setBounds(150, 175, 100, 100);
+
+    lowPassFilterSlider->setBounds(250, 175, 100, 100);
+
+    decaySlider->setBounds(400, 30, 100, 100);
+
+    dampingSlider->setBounds(400, 160, 100, 100);
+
+    bandwidthSlider->setBounds(400, 290, 100, 100);
 }
 
-void AlgoReverbAudioProcessorEditor::sliderValueChanged(Slider* slider) {
-    if (slider == &predelaySlider)
-        processor.predelayMS = predelaySlider.getValue();
-    
-    if (slider == &wetDrySlider)
-        processor.wet = wetDrySlider.getValue();
+void AlgoReverbAudioProcessorEditor::setSlider(Slider* slider)
+{
+    slider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    slider->setTextBoxStyle(Slider::TextBoxBelow, false, 50, 30);
+    addAndMakeVisible(slider);
+}
 
-    if (slider == &reverbTimeSlider)
-        processor.timeValue = reverbTimeSlider.getValue();
-    
-    if (slider == &modulationSlider)
-        processor.modValue = modulationSlider.getValue();
-    
-    if (slider == &diffusionSlider)
-        processor.diffusionValue = diffusionSlider.getValue();
-    
-    if (slider == &lowPassFilterSlider)
-        processor.lowpassValue = lowPassFilterSlider.getValue();
-    
-    if (slider == &decaySlider)
-        processor.decayValue = decaySlider.getValue();
-    
-    if (slider == &dampingSlider)
-        processor.dampingValue = dampingSlider.getValue();
-    
-    if (slider == &bandwithSlider)
-        processor.bandwithValue = bandwithSlider.getValue();
+void AlgoReverbAudioProcessorEditor::setLabel(Label* label, String labelText)
+{
+    label->setText(labelText, dontSendNotification);
+    label->setJustificationType(Justification::centred);
+    addAndMakeVisible(label);
 }

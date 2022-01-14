@@ -21,13 +21,74 @@ AlgoReverbAudioProcessor::AlgoReverbAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), apvts(*this, nullptr, "Parameters", parameterLayout())
 #endif
 {
 }
 
 AlgoReverbAudioProcessor::~AlgoReverbAudioProcessor()
 {
+}
+
+AudioProcessorValueTreeState::ParameterLayout AlgoReverbAudioProcessor::parameterLayout()
+{
+    AudioProcessorValueTreeState::ParameterLayout params;
+    
+    // TIME
+    params.add(std::make_unique<juce::AudioParameterFloat>("TIME",
+                                                           "Time",
+                                                           NormalisableRange<float>(0.4f, 0.7f, 0.01f, 1.0f),
+                                                           0.5f));
+    
+    // MODULATION
+    params.add(std::make_unique<juce::AudioParameterFloat>("MOD",
+                                                           "Modulation",
+                                                           NormalisableRange<float>(1.0f, 10.0f, 0.01f, 1.0f),
+                                                           1.0f));
+    
+    // DRYWET
+    params.add(std::make_unique<juce::AudioParameterFloat>("DRYWET",
+                                                           "Dry/Wet",
+                                                           NormalisableRange<float>(0.0f, 1.0f, 0.01f, 1.0f),
+                                                           0.5f));
+
+    // PREDELAY
+    params.add(std::make_unique<juce::AudioParameterFloat>("PREDELAY",
+                                                           "PreDelay",
+                                                           NormalisableRange<float>(0.0f, 200.0f, 0.1f, 1.0f),
+                                                           0.0f));
+    
+    // DIFUSSION
+    params.add(std::make_unique<juce::AudioParameterFloat>("DIFFUSION",
+                                                           "Diffusion",
+                                                           NormalisableRange<float>(0.2f, 0.8f, 0.01f, 1.0f),
+                                                           0.5f));
+    
+    // LPF
+    params.add(std::make_unique<juce::AudioParameterFloat>("LPF",
+                                                           "Lpf",
+                                                           NormalisableRange<float>(500.0f, 20000.0f, 1.0f, 1.0f),
+                                                           10000.0f));
+    
+    // DECAY
+    params.add(std::make_unique<juce::AudioParameterFloat>("DECAY",
+                                                           "Decay",
+                                                           NormalisableRange<float>(0.0f, 0.99f, 0.01f, 1.0f),
+                                                           0.5f));
+    
+    // DAMPING
+    params.add(std::make_unique<juce::AudioParameterFloat>("DAMPING",
+                                                           "Damping",
+                                                           NormalisableRange<float>(0.0f, 0.99f, 0.01f, 1.0f),
+                                                           0.5f));
+    
+    // BANDWIDTH
+    params.add(std::make_unique<juce::AudioParameterFloat>("BANDWIDTH",
+                                                           "Bandwidth",
+                                                           NormalisableRange<float>(0.0f, 0.99f, 0.01f, 1.0f),
+                                                           0.5f));
+
+    return params;
 }
 
 //==============================================================================
@@ -115,6 +176,12 @@ void AlgoReverbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     
     //JUCE REVERB
     reverbJuce.prepare(spec);
+    reverbJuceParameters.roomSize = 0.7f;
+    
+    if (sampleRate == 96000)
+    {
+        reverbJuceParameters.damping = 0.727;
+    }
     
     //JUCE REVERB CUSTOM
     reverbJuceCustom.prepare(spec);
@@ -193,11 +260,17 @@ void AlgoReverbAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 //
 //            buffer.getWritePointer(channel)[n] = y;
 //        }
-//    }
+//    } 
     
     // PLATE REVERB
+    auto lowpassValue = apvts.getRawParameterValue("LPF")->load();
     plateReverb.setFiltersCutoffFreq(lowpassValue);
-    plateReverb.processPlateReverb(buffer, wet, bandwithValue, dampingValue, decayValue);
+    
+    auto wet  = apvts.getRawParameterValue("DRYWET")->load();
+    auto bandwidthValue = apvts.getRawParameterValue("BANDWIDTH")->load();
+    auto dampingValue = apvts.getRawParameterValue("DAMPING")->load();
+    auto decayValue = apvts.getRawParameterValue("DECAY")->load();
+    plateReverb.processPlateReverb(buffer, wet, bandwidthValue, dampingValue, decayValue);
     
     //JUCE REVERB
 //    reverbJuceParameters.dryLevel = 1 - wet;
